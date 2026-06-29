@@ -1,0 +1,271 @@
+.interior {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: #2a2018;
+}
+
+.interior canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* --- Build menu panel --- */
+.build-menu {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  width: 280px;
+  max-width: calc(100vw - 36px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  background: linear-gradient(180deg, var(--wood-light), var(--wood-face));
+  color: var(--ink);
+  border: 4px solid var(--border-outer);
+  border-radius: 6px;
+  box-shadow:
+    inset 0 0 0 3px var(--border-bevel),
+    0 10px 24px rgba(0, 0, 0, 0.5);
+  padding: 14px;
+}
+
+.build-menu__head {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-bottom: 8px;
+  border-bottom: 3px solid var(--wood-seam);
+}
+
+.build-menu__title {
+  font-family: var(--font-pixel);
+  font-size: 12px;
+  color: var(--border-outer);
+}
+
+.build-menu__sub {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--wood-dark);
+}
+
+.build-menu__items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.item-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 10px;
+  cursor: pointer;
+  text-align: left;
+
+  background: linear-gradient(180deg, #f3e4c8, #e3c79c);
+  color: var(--ink);
+  border: 3px solid var(--border-outer);
+  border-radius: 5px;
+  box-shadow: 0 3px 0 var(--border-outer);
+  transition: transform 0.06s ease, box-shadow 0.06s ease, filter 0.12s ease;
+}
+
+.item-btn:hover:not(:disabled) {
+  filter: brightness(1.05);
+}
+
+.item-btn:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 0 0 var(--border-outer);
+}
+
+.item-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(0.4);
+}
+
+.item-btn__swatch {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  border: 2px solid var(--border-outer);
+  border-radius: 3px;
+}
+
+.item-btn__label {
+  flex: 1;
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.1;
+}
+
+.item-btn__count {
+  font-family: var(--font-pixel);
+  font-size: 9px;
+  color: var(--border-outer);
+}
+
+.item-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.color-dots {
+  display: flex;
+  gap: 6px;
+  padding-left: 2px;
+}
+
+.color-dot {
+  border: 2px solid var(--border-outer);
+  border-radius: 50%;
+  padding: 0;
+  cursor: pointer;
+  box-shadow: 0 2px 0 rgba(94, 42, 28, 0.6);
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+
+.color-dot:hover {
+  transform: translateY(-1px);
+}
+
+.color-dot.is-active {
+  border-color: var(--cream);
+  box-shadow:
+    0 0 0 2px var(--merah),
+    0 2px 0 rgba(94, 42, 28, 0.6);
+}
+
+.build-menu__hint {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--wood-dark);
+  line-height: 1.3;
+}
+
+/* drei <Html> wrapper — must never intercept canvas pointer events,
+   otherwise labels would block clicking/dragging boxes behind them. */
+.box-label-wrap {
+  pointer-events: none !important;
+}
+
+/* Floating 3D label above each placed box */
+.box-label {
+  font-family: var(--font-body);
+  font-size: 13px;
+  white-space: nowrap;
+  color: var(--cream);
+  background: rgba(58, 33, 20, 0.85);
+  border: 2px solid var(--border-outer);
+  border-radius: 4px;
+  padding: 2px 6px;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* --- Selection toolbar (bottom center) --- */
+.select-bar {
+  position: absolute;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: calc(100vw - 36px);
+  flex-wrap: wrap;
+  justify-content: center;
+
+  background: linear-gradient(180deg, var(--wood-light), var(--wood-face));
+  color: var(--ink);
+  border: 4px solid var(--border-outer);
+  border-radius: 6px;
+  box-shadow:
+    inset 0 0 0 3px var(--border-bevel),
+    0 8px 20px rgba(0, 0, 0, 0.5);
+  padding: 10px 14px;
+}
+
+.select-bar__name {
+  font-family: var(--font-body);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--border-outer);
+  padding-right: 4px;
+}
+
+.select-bar__hint {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--wood-dark);
+}
+
+.tool-btn {
+  font-family: var(--font-pixel);
+  font-size: 10px;
+  color: var(--ink);
+  background: linear-gradient(180deg, #f3e4c8, #e3c79c);
+  border: 3px solid var(--border-outer);
+  border-radius: 5px;
+  padding: 10px 12px;
+  cursor: pointer;
+  box-shadow: 0 3px 0 var(--border-outer);
+  transition: transform 0.06s ease, box-shadow 0.06s ease, filter 0.12s ease;
+}
+
+.tool-btn:hover {
+  filter: brightness(1.05);
+}
+
+.tool-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 0 0 var(--border-outer);
+}
+
+.tool-btn--danger {
+  color: var(--cream);
+  background: var(--merah);
+}
+
+/* --- Exit button --- */
+.interior__exit {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  font-family: var(--font-pixel);
+  font-size: 11px;
+  color: var(--cream);
+  background: var(--merah);
+  border: 4px solid var(--border-outer);
+  border-radius: 5px;
+  padding: 12px 16px;
+  cursor: pointer;
+  box-shadow:
+    inset 0 0 0 3px rgba(246, 236, 214, 0.25),
+    0 5px 0 var(--border-outer),
+    0 8px 12px rgba(0, 0, 0, 0.5);
+  transition: transform 0.06s ease, box-shadow 0.06s ease;
+}
+
+.interior__exit:active {
+  transform: translateY(5px);
+  box-shadow:
+    inset 0 0 0 3px rgba(246, 236, 214, 0.2),
+    0 0 0 var(--border-outer);
+}
+
+@media (max-width: 640px) {
+  .build-menu {
+    width: 220px;
+  }
+  .item-btn__label {
+    font-size: 13px;
+  }
+}
