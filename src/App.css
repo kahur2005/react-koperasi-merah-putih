@@ -1,0 +1,99 @@
+.stage {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+/* Background fills the entire display, cropping as needed (game backdrop). */
+.stage__bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('/dashboard.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
+}
+
+/* HUD layer sits on top and spans the full viewport. */
+.hud {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  /* Let clicks fall through to the background; HUD elements re-enable it. */
+  pointer-events: none;
+}
+
+.hud > * {
+  pointer-events: auto;
+}
+
+/* --- Clickable center building --- */
+.building-hotspot {
+  position: absolute;
+  left: 50%;
+  top: 47%;
+  transform: translate(-50%, -50%);
+  width: clamp(180px, 26vw, 460px);
+  height: clamp(180px, 40vh, 460px);
+  z-index: 3;
+
+  border: 3px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.building-hotspot:hover,
+.building-hotspot:focus-visible {
+  outline: none;
+  transform: translate(-50%, calc(-50% - 4px)) scale(1.015);
+  border-color: rgba(246, 236, 214, 0.9);
+  background: rgba(255, 232, 180, 0.12);
+  box-shadow:
+    0 0 0 3px rgba(192, 50, 43, 0.7),
+    0 18px 30px rgba(0, 0, 0, 0.45);
+}
+
+.building-hotspot__tip {
+  font-family: var(--font-pixel);
+  font-size: 12px;
+  color: var(--cream);
+  background: var(--merah);
+  border: 3px solid var(--border-outer);
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin-bottom: -18px;
+  box-shadow: 0 4px 0 var(--border-outer), 0 8px 12px rgba(0, 0, 0, 0.5);
+
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  pointer-events: none;
+}
+
+.building-hotspot:hover .building-hotspot__tip,
+.building-hotspot:focus-visible .building-hotspot__tip {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 640px) {
+  .building-hotspot__tip {
+    font-size: 9px;
+    padding: 5px 8px;
+  }
+}
