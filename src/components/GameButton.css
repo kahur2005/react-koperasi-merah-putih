@@ -1,0 +1,128 @@
+.game-button {
+  position: absolute;
+  z-index: 5;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* --- Corner anchoring (relative to the village frame) --- */
+.game-button--top-left {
+  top: 3%;
+  left: 3%;
+}
+.game-button--top-right {
+  top: 3%;
+  right: 3%;
+}
+.game-button--mid-left {
+  top: 50%;
+  left: 3%;
+  transform: translateY(-50%);
+}
+.game-button--bottom-left {
+  bottom: 3%;
+  left: 3%;
+}
+.game-button--bottom-right {
+  bottom: 3%;
+  right: 3%;
+}
+
+/* The wooden plank itself, built from layered solid insets for a pixel bevel. */
+.game-button__plank {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 132px;
+  padding: 16px 20px;
+
+  background: linear-gradient(
+    180deg,
+    var(--wood-light) 0%,
+    var(--wood-face) 45%,
+    var(--wood-dark) 100%
+  );
+  color: var(--ink);
+
+  /* chunky red-brown frame */
+  border: 4px solid var(--border-outer);
+  border-radius: 4px;
+
+  /* stacked insets = pixel bevel + plank seam + drop shadow */
+  box-shadow:
+    inset 0 0 0 3px var(--border-bevel),
+    inset 0 6px 0 rgba(255, 244, 222, 0.35),
+    inset 0 -6px 0 rgba(94, 42, 28, 0.45),
+    inset 0 -1px 0 12px var(--wood-seam),
+    0 6px 0 var(--border-outer),
+    0 10px 14px rgba(0, 0, 0, 0.45);
+
+  transition:
+    transform 0.06s ease,
+    box-shadow 0.06s ease,
+    filter 0.12s ease;
+}
+
+.game-button__icon {
+  font-size: 22px;
+  line-height: 1;
+  filter: drop-shadow(0 2px 0 rgba(94, 42, 28, 0.5));
+}
+
+.game-button__label {
+  font-family: var(--font-pixel);
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  text-align: center;
+  text-shadow: 0 2px 0 rgba(246, 236, 214, 0.5);
+}
+
+/* Hover: warm up the wood. */
+.game-button:hover .game-button__plank {
+  filter: brightness(1.08) saturate(1.05);
+}
+
+.game-button:focus-visible {
+  outline: none;
+}
+.game-button:focus-visible .game-button__plank {
+  box-shadow:
+    inset 0 0 0 3px var(--border-bevel),
+    inset 0 6px 0 rgba(255, 244, 222, 0.35),
+    inset 0 -6px 0 rgba(94, 42, 28, 0.45),
+    inset 0 -1px 0 12px var(--wood-seam),
+    0 6px 0 var(--border-outer),
+    0 0 0 4px var(--cream),
+    0 0 0 8px var(--merah);
+}
+
+/* Press down: the plank sinks onto its shadow. */
+.game-button:active .game-button__plank {
+  transform: translateY(6px);
+  box-shadow:
+    inset 0 0 0 3px var(--border-bevel),
+    inset 0 6px 0 rgba(255, 244, 222, 0.25),
+    inset 0 -4px 0 rgba(94, 42, 28, 0.45),
+    inset 0 -1px 0 12px var(--wood-seam),
+    0 0 0 var(--border-outer),
+    0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+@media (max-width: 640px) {
+  .game-button__plank {
+    min-width: 92px;
+    padding: 10px 12px;
+    gap: 4px;
+  }
+  .game-button__label {
+    font-size: 8px;
+  }
+  .game-button__icon {
+    font-size: 16px;
+  }
+}
