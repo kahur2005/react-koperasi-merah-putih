@@ -1,0 +1,45 @@
+:root {
+  /* --- Palette pulled from the Koperasi Merah Putih art --- */
+  --wood-light: #e6b97c;
+  --wood-face: #cd9355;
+  --wood-dark: #9a6536;
+  --wood-seam: #7a4f2a;
+  --border-outer: #5e2a1c; /* red-brown chunky frame */
+  --border-bevel: #c98a57; /* lighter inner bevel */
+  --merah: #c0322b;
+  --cream: #f6ecd6;
+  --ink: #3a2114;
+
+  --font-pixel: 'Press Start 2P', monospace;
+  --font-body: 'Pixelify Sans', system-ui, sans-serif;
+
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: #1a120b;
+  /* keep the pixel art crisp instead of blurry when scaled */
+  image-rendering: pixelated;
+  -webkit-font-smoothing: none;
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
