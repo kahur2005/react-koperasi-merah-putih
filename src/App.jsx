@@ -1,6 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import GameButton from './components/GameButton.jsx'
 import Interior from './components/Interior.jsx'
+import Hud from './components/hud/Hud.jsx'
+import { GameLoop } from './game/loop/GameLoop.js'
 import './App.css'
 
 /* Placeholder actions — swap these out for real navigation later. */
@@ -14,6 +16,14 @@ const buttons = [
 
 export default function App() {
   const [inside, setInside] = useState(false)
+  const loopRef = useRef(null)
+
+  useEffect(() => {
+    const loop = new GameLoop()
+    loopRef.current = loop
+    loop.start()
+    return () => loop.stop()
+  }, [])
 
   const handleButton = (label) => {
     // Placeholder — wire up real screens here.
@@ -33,6 +43,7 @@ export default function App() {
 
       {/* Game HUD overlaid on top of the background. */}
       <div className="hud">
+        <Hud />
         {/* Center building = clickable hotspot */}
         <button
           type="button"
