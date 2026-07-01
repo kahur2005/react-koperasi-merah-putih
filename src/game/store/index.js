@@ -7,6 +7,7 @@ import { createMembersSlice } from './membersSlice.js'
 import { createCustomersSlice } from './customersSlice.js'
 import { createLoansSlice } from './loansSlice.js'
 import { createUiSlice } from './uiSlice.js'
+import { createGameSlice } from './gameSlice.js'
 
 export const useGameStore = create((set, get) => ({
   ...createTimeSlice(set, get),
@@ -17,4 +18,5 @@ export const useGameStore = create((set, get) => ({
   ...createCustomersSlice(set, get),
   ...createLoansSlice(set, get),
   ...createUiSlice(set, get),
+  ...createGameSlice(set, get),
 }))
