@@ -3,7 +3,7 @@
   position: absolute;
   top: 14px;
   right: 14px;
-  z-index: 5;
+  z-index: 6; /* draw above corner buttons (z-index 5) */
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -47,6 +47,23 @@
   font-family: var(--font-body);
   font-size: 13px;
   white-space: nowrap;
+}
+
+/* Pending conversions this day — commit into totalMembers at end of day. */
+.hud-stat__pending {
+  margin-left: 4px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--wood-light);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 11px;
+  animation: hud-pending-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes hud-pending-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.65; transform: scale(0.92); }
 }
 
 @media (max-width: 640px) {

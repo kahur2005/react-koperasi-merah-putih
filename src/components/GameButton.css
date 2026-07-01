@@ -13,8 +13,9 @@
   top: 3%;
   left: 3%;
 }
+/* Pushed down so it clears the top-right game HUD (money + stat chips). */
 .game-button--top-right {
-  top: 3%;
+  top: 108px;
   right: 3%;
 }
 .game-button--mid-left {
@@ -114,6 +115,10 @@
 }
 
 @media (max-width: 640px) {
+  /* HUD chips can wrap to extra rows on narrow screens — give more clearance. */
+  .game-button--top-right {
+    top: 140px;
+  }
   .game-button__plank {
     min-width: 92px;
     padding: 10px 12px;
