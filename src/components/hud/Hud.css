@@ -1,14 +1,33 @@
-/* Top-right money readout + a row of compact stat chips below it. */
 .hud-panel {
   position: absolute;
   top: 14px;
   right: 14px;
-  z-index: 6; /* draw above corner buttons (z-index 5) */
+  left: 14px;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.hud-summary,
+.hud-card {
+  pointer-events: auto;
+  color: var(--cream);
+  background: rgba(58, 33, 20, 0.9);
+  border: 3px solid var(--border-outer);
+  border-radius: 8px;
+  box-shadow: 0 4px 0 var(--border-outer), 0 8px 14px rgba(0, 0, 0, 0.45);
+}
+
+.hud-summary {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 8px;
-  pointer-events: none; /* HUD is read-only; let clicks pass through */
+  padding: 8px;
+  max-width: min(760px, 100%);
 }
 
 .hud-money {
@@ -17,10 +36,8 @@
   gap: 8px;
   padding: 8px 14px;
   background: var(--merah);
-  color: var(--cream);
-  border: 3px solid var(--border-outer);
+  border: 2px solid var(--border-bevel);
   border-radius: 8px;
-  box-shadow: 0 4px 0 var(--border-outer), 0 8px 14px rgba(0, 0, 0, 0.5);
   font-family: var(--font-pixel);
   font-size: 14px;
 }
@@ -35,13 +52,11 @@
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 6px;
-  max-width: 60vw;
 }
 
 .hud-stat {
   padding: 4px 8px;
-  background: rgba(58, 33, 20, 0.85);
-  color: var(--cream);
+  background: rgba(25, 18, 14, 0.82);
   border: 2px solid var(--border-bevel);
   border-radius: 6px;
   font-family: var(--font-body);
@@ -49,7 +64,9 @@
   white-space: nowrap;
 }
 
-/* Pending conversions this day — commit into totalMembers at end of day. */
+.hud-stat--won { background: #207245; }
+.hud-stat--lost { background: #8a1f1f; }
+
 .hud-stat__pending {
   margin-left: 4px;
   padding: 0 5px;
@@ -58,15 +75,162 @@
   color: var(--ink);
   font-weight: 700;
   font-size: 11px;
-  animation: hud-pending-pulse 1.4s ease-in-out infinite;
 }
 
-@keyframes hud-pending-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.65; transform: scale(0.92); }
+.hud-alert {
+  color: #ffd7d7;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.hud-grid {
+  align-self: stretch;
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) minmax(280px, 1fr) minmax(220px, 0.75fr);
+  gap: 10px;
+  max-height: calc(100vh - 118px);
+  overflow: auto;
+  pointer-events: none;
+}
+
+.hud-card {
+  padding: 10px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.hud-card h2 {
+  margin: 0 0 8px;
+  font-family: var(--font-pixel);
+  font-size: 13px;
+}
+
+.stock-list,
+.loan-list,
+.sector-list,
+.event-log {
+  display: grid;
+  gap: 8px;
+}
+
+.stock-row,
+.loan-card {
+  padding: 8px;
+  background: rgba(25, 18, 14, 0.6);
+  border-left: 5px solid #3ca35c;
+  border-radius: 6px;
+}
+
+.stock-row--warning,
+.loan-card--medium {
+  border-left-color: #d9ac35;
+}
+
+.stock-row--critical,
+.loan-card--high {
+  border-left-color: #d84c3f;
+}
+
+.stock-row__head,
+.stock-row__meta,
+.supplier-prices,
+.loan-card__head,
+.sector-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.stock-meter {
+  position: relative;
+  height: 10px;
+  margin: 7px 0;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+}
+
+.stock-meter span {
+  display: block;
+  height: 100%;
+  background: #3ca35c;
+}
+
+.stock-row--warning .stock-meter span { background: #d9ac35; }
+.stock-row--critical .stock-meter span { background: #d84c3f; }
+
+.supplier-prices {
+  margin-top: 6px;
+  color: #f4dfb6;
+}
+
+.hud-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.hud-actions button {
+  min-height: 28px;
+  padding: 5px 8px;
+  color: var(--cream);
+  background: var(--merah);
+  border: 2px solid var(--border-bevel);
+  border-radius: 6px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+}
+
+.hud-actions button:hover {
+  filter: brightness(1.12);
+}
+
+.loan-card p,
+.hud-empty,
+.event-log__item {
+  margin: 5px 0 0;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.sector-row {
+  padding: 6px 8px;
+  background: rgba(25, 18, 14, 0.55);
+  border-radius: 6px;
+}
+
+.hud-card--log {
+  max-height: 410px;
+}
+
+.event-log__item--danger,
+.event-log__item--warning {
+  color: #ffd7a8;
+}
+
+.event-log__item--success {
+  color: #c5f3ce;
+}
+
+@media (max-width: 980px) {
+  .hud-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 640px) {
-  .hud-money { font-size: 11px; padding: 6px 10px; }
-  .hud-stat { font-size: 11px; }
+  .hud-panel {
+    top: 8px;
+    right: 8px;
+    left: 8px;
+  }
+
+  .hud-money,
+  .hud-stat,
+  .hud-actions button {
+    font-size: 11px;
+  }
 }

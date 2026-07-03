@@ -1,24 +1,42 @@
 /**
  * @typedef {Object} Rack
  * @property {string} id
- * @property {string} itemType   Product id (e.g. 'rice').
- * @property {number} capacity   Fixed at RACK_CAPACITY (20).
+ * @property {'rice'|'fruit'|'gas'} itemType
+ * @property {number} capacity
  * @property {number} currentStock
  */
 
 /**
  * @typedef {Object} Customer
  * @property {string} id
- * @property {string} requestedItem  Product id the customer wants.
+ * @property {'rice'|'fruit'|'gas'} requestedItem
  */
 
 /**
- * @typedef {Object} Loan
+ * @typedef {Object} Sector
+ * @property {'rice'|'fruit'|'gas'} id
+ * @property {number} level
+ * @property {number} maxLevel
+ * @property {number} successfulLoans
+ * @property {number} failedLoans
+ */
+
+/**
+ * @typedef {Object} LoanRequest
  * @property {string} id
- * @property {number} memberId
- * @property {number} amount
- * @property {number} dueDay
- * @property {number} interestRate
+ * @property {string} applicant
+ * @property {number} age
+ * @property {string} job
+ * @property {number} monthlyIncome
+ * @property {number} loanAmount
+ * @property {string} purpose
+ * @property {'rice'|'fruit'|'gas'} sectorType
+ * @property {'none'|'minor'|'serious'} crimeHistory
+ * @property {'good'|'average'|'bad'|'none'} repaymentHistory
+ * @property {number} riskScore
+ * @property {'Low Risk'|'Medium Risk'|'High Risk'} riskLabel
+ * @property {'low'|'medium'|'high'} potentialVillageImpact
+ * @property {'pending'|'accepted'|'rejected'|'succeeded'|'failed'} status
  */
 
 /**

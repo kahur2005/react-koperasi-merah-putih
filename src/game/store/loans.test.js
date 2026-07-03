@@ -2,31 +2,86 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { useGameStore } from './index.js'
 import { formatCurrency } from '../currency.js'
 
-beforeEach(() => {
+function seedLoanState() {
   useGameStore.setState({
-    money: 200000, formattedMoney: formatCurrency(200000),
-    totalMembers: 20, currentDay: 30, activeLoans: [],
+    level: 1,
+    currentDay: 3,
+    money: 5000000,
+    formattedMoney: formatCurrency(5000000),
+    happiness: 70,
+    totalMembers: 100,
+    activeLoanRequests: [],
+    acceptedLoans: [],
+    notifications: [],
+    sectors: {
+      rice: { id: 'rice', level: 0, maxLevel: 5, successfulLoans: 0, failedLoans: 0 },
+      fruit: { id: 'fruit', level: 0, maxLevel: 5, successfulLoans: 0, failedLoans: 0 },
+      gas: { id: 'gas', level: 0, maxLevel: 5, successfulLoans: 0, failedLoans: 0 },
+    },
   })
-})
+}
 
-describe('processLoans', () => {
-  it('issues loans for 5% of members and debits coop cash', () => {
-    // 20 members * 5% = 1 borrower; rng 0 -> min amount 5000
-    const res = useGameStore.getState().processLoans(() => 0)
-    expect(res.issued).toBe(1)
-    expect(useGameStore.getState().activeLoans.length).toBe(1)
-    expect(useGameStore.getState().activeLoans[0].dueDay).toBe(60)
-    expect(useGameStore.getState().money).toBe(195000) // 200000 - 5000
+beforeEach(seedLoanState)
+
+describe('loan requests', () => {
+  it('generates one level-1 request every 3 days', () => {
+    const requests = useGameStore.getState().generateLoanRequests(() => 0)
+    expect(requests).toHaveLength(1)
+    expect(useGameStore.getState().activeLoanRequests).toHaveLength(1)
+    expect(requests[0].riskScore).toBeGreaterThanOrEqual(0)
   })
-  it('repays matured loans with 5% interest', () => {
+
+  it('accepts a loan and debits cooperative money', () => {
     useGameStore.setState({
-      currentDay: 60,
-      activeLoans: [{ id: 'l1', memberId: 0, amount: 10000, dueDay: 60, interestRate: 0.05 }],
-      totalMembers: 0,
+      activeLoanRequests: [{
+        id: 'loan-a',
+        applicant: 'Sari',
+        sectorType: 'rice',
+        loanAmount: 1000000,
+        riskScore: 10,
+        riskLabel: 'Low Risk',
+        potentialVillageImpact: 'high',
+      }],
     })
-    const res = useGameStore.getState().processLoans(() => 0)
-    expect(res.repaid).toBe(1)
-    expect(useGameStore.getState().money).toBe(210500) // +10000*1.05
-    expect(useGameStore.getState().activeLoans.length).toBe(0)
+    expect(useGameStore.getState().acceptLoan('loan-a')).toBe(true)
+    expect(useGameStore.getState().money).toBe(4000000)
+    expect(useGameStore.getState().activeLoanRequests).toHaveLength(0)
+    expect(useGameStore.getState().acceptedLoans[0].dueDay).toBe(6)
+  })
+
+  it('rejects high-risk loans with a small happiness gain', () => {
+    useGameStore.setState({
+      activeLoanRequests: [{
+        id: 'loan-b',
+        applicant: 'Budi',
+        sectorType: 'gas',
+        loanAmount: 1000000,
+        riskScore: 80,
+        riskLabel: 'High Risk',
+      }],
+    })
+    expect(useGameStore.getState().rejectLoan('loan-b')).toBe(true)
+    expect(useGameStore.getState().happiness).toBe(71)
+  })
+
+  it('successful accepted loans improve sectors and local supplier prices', () => {
+    useGameStore.setState({
+      currentDay: 6,
+      acceptedLoans: [{
+        id: 'loan-c',
+        applicant: 'Dewi',
+        sectorType: 'rice',
+        loanAmount: 1000000,
+        riskScore: 0,
+        potentialVillageImpact: 'high',
+        dueDay: 6,
+      }],
+    })
+    const result = useGameStore.getState().resolveAcceptedLoans(() => 0)
+    expect(result.succeeded).toBe(1)
+    expect(useGameStore.getState().sectors.rice.level).toBe(1)
+    expect(useGameStore.getState().localSupplierPrice('rice')).toBe(9500)
+    expect(useGameStore.getState().money).toBe(5100000)
+    expect(useGameStore.getState().happiness).toBe(73)
   })
 })

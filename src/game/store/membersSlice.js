@@ -1,7 +1,7 @@
-import { MEMBER_MONTHLY_FEE } from '../config.js'
+import { INITIAL_MEMBERS, MEMBER_MONTHLY_FEE } from '../config.js'
 
 export const createMembersSlice = (set, get) => ({
-  totalMembers: 0,
+  totalMembers: INITIAL_MEMBERS,
   pendingMembers: 0,
 
   // Queue a new member (applied at end of day via commitPendingMembers).
@@ -9,6 +9,11 @@ export const createMembersSlice = (set, get) => ({
 
   commitPendingMembers: () =>
     set((s) => ({ totalMembers: s.totalMembers + s.pendingMembers, pendingMembers: 0 })),
+
+  adjustMembers: (delta) =>
+    set((s) => ({
+      totalMembers: Math.max(0, s.totalMembers + delta),
+    })),
 
   collectMonthlyFees: () => {
     const { totalMembers, addMoney } = get()

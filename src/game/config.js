@@ -1,58 +1,111 @@
-// All tunable game constants. Balance the game by editing this file only.
+// All tunable game constants. Balance the MVP by editing this file.
 
-export const INITIAL_MONEY = 200000
-export const GAME_DAYS = 365
+export const INITIAL_MONEY = 5000000
+export const GAME_DAYS = 90
 export const DAY_DURATION_MS = 300000 // 5 real minutes = 1 in-game day
 export const CASHIER_INTERVAL_MS = 5000 // each cashier serves 1 customer / 5s
 export const MONTHLY_INTERVAL_DAYS = 30
 
-export const RACK_CAPACITY = 20
-
-// Village level -> display name + fixed facility caps.
-export const VILLAGE = {
-  1: { name: 'Desa Miskin', maxRacks: 4, maxCashiers: 1 },
-  2: { name: 'Desa Menengah', maxRacks: 6, maxCashiers: 2 },
-  3: { name: 'Desa Maju', maxRacks: 8, maxCashiers: 3 },
-}
-
-// Requirements to reach a given level (keyed by the target level).
-export const UPGRADE_REQUIREMENTS = {
-  2: { money: 200000, members: 20 },
-  3: { money: 500000, members: 50 },
-}
-
-export const MEMBERSHIP = {
-  base: 0.4,
-  fullStockBonus: 0.1,
-  fastQueueBonus: 0.05,
-}
-
+export const INITIAL_MEMBERS = 100
 export const MEMBER_MONTHLY_FEE = 2000
 
-export const LOANS = {
-  borrowerRate: 0.05, // 5% of members borrow each month
-  minAmount: 5000,
-  maxAmount: 30000,
-  interestRate: 0.05, // repay amount * 1.05
-  termDays: 30,
-}
-
-export const REPUTATION = {
+export const HAPPINESS = {
   min: 0,
   max: 100,
-  start: 50,
-  successDelta: 1,
-  failDelta: -2,
-  stockoutDelta: -3,
-  // Bands drive daily customer spawn range [min, spawnMax].
-  bands: {
-    low: { threshold: 33, min: 5, spawnMax: 8 },
-    mid: { threshold: 66, min: 8, spawnMax: 15 },
-    high: { threshold: 100, min: 15, spawnMax: 25 },
+  start: 70,
+  allSafeBonus: 2,
+  belowSafePenalty: {
+    rice: -3,
+    fruit: -1,
+    gas: -3,
+  },
+  emptyPenalty: {
+    rice: -8,
+    fruit: -3,
+    gas: -8,
+  },
+  successfulLoan: 3,
+  failedLoan: -4,
+  correctRejection: 1,
+}
+
+export const VILLAGE = {
+  1: {
+    name: 'Small Village Cooperative',
+    memberRequirement: 100,
+    capacityModifier: 1,
+    maxRacks: 3,
+    maxCashiers: 1,
+    maxPlaceables: 4,
+    customerRange: [8, 14],
+  },
+  2: {
+    name: 'Growing Cooperative',
+    memberRequirement: 300,
+    capacityModifier: 1.5,
+    maxRacks: 5,
+    maxCashiers: 2,
+    maxPlaceables: 8,
+    customerRange: [14, 24],
+  },
+  3: {
+    name: 'Advanced Cooperative',
+    memberRequirement: 500,
+    capacityModifier: 2,
+    maxRacks: 8,
+    maxCashiers: 3,
+    maxPlaceables: 12,
+    customerRange: [24, 38],
   },
 }
 
-// When rice OR gas is empty, multiply the day's spawn count by this.
-export const STOCKOUT_SPAWN_PENALTY = 0.5
-// Queue length below this counts as a "fast queue" for the membership bonus.
-export const FAST_QUEUE_THRESHOLD = 3
+export const UPGRADE_REQUIREMENTS = {
+  2: { members: 300 },
+  3: { members: 500 },
+}
+
+export const FACILITY_COSTS = {
+  rack: 250000,
+  cashier: 750000,
+  placeable: 150000,
+}
+
+export const MEMBERSHIP = {
+  base: 0.05,
+  highHappinessBonus: 0.04,
+  allSafeBonus: 0.04,
+  essentialEmptyPenalty: 0.08,
+  max: 0.15,
+}
+
+export const CUSTOMER_DEMAND_WEIGHTS = {
+  rice: 0.4,
+  fruit: 0.3,
+  gas: 0.3,
+}
+
+export const SECTORS = {
+  maxLevel: 5,
+  discountPerLevel: 0.05,
+  maxDiscount: 0.3,
+  gasMarginPerLevel: 300,
+}
+
+export const LOANS = {
+  resolutionDays: 3,
+  requestFrequency: {
+    1: { everyDays: 3, count: 1 },
+    2: { everyDays: 2, count: 1 },
+    3: { everyDays: 1, count: 2 },
+  },
+  riskLabels: {
+    lowMax: 30,
+    mediumMax: 60,
+  },
+}
+
+export const GAME_STATUS = {
+  running: 'running',
+  won: 'won',
+  lost: 'lost',
+}

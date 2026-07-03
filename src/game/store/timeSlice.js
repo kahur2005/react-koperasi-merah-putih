@@ -1,4 +1,4 @@
-import { GAME_DAYS, MONTHLY_INTERVAL_DAYS } from '../config.js'
+import { GAME_DAYS, GAME_STATUS, MONTHLY_INTERVAL_DAYS } from '../config.js'
 
 export const createTimeSlice = (set, get) => ({
   currentDay: 1,
@@ -19,5 +19,5 @@ export const createTimeSlice = (set, get) => ({
       }
     }),
 
-  isGameOver: () => get().currentDay > GAME_DAYS,
+  isGameOver: () => get().currentDay > GAME_DAYS || get().gameStatus !== GAME_STATUS.running,
 })

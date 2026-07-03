@@ -1,23 +1,26 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { useGameStore } from './index.js'
+import { formatCurrency } from '../currency.js'
 
 beforeEach(() => {
-  useGameStore.setState({ money: 200000, formattedMoney: 'Rp 200.000', currentDay: 1, currentMonth: 1 })
+  useGameStore.setState({ money: 5000000, formattedMoney: formatCurrency(5000000), currentDay: 1, currentMonth: 1 })
 })
 
 describe('economy slice', () => {
-  it('starts at Rp 200.000', () => {
+  it('starts from the MVP campaign budget', () => {
     const s = useGameStore.getState()
-    expect(s.money).toBe(200000)
-    expect(s.formattedMoney).toBe('Rp 200.000')
+    expect(s.money).toBe(5000000)
+    expect(s.formattedMoney).toBe('Rp 5.000.000')
   })
+
   it('addMoney updates formattedMoney synchronously', () => {
     useGameStore.getState().addMoney(35000)
-    expect(useGameStore.getState().formattedMoney).toBe('Rp 235.000')
+    expect(useGameStore.getState().formattedMoney).toBe('Rp 5.035.000')
   })
+
   it('spendMoney fails when insufficient', () => {
-    expect(useGameStore.getState().spendMoney(999999)).toBe(false)
-    expect(useGameStore.getState().money).toBe(200000)
+    expect(useGameStore.getState().spendMoney(9999999)).toBe(false)
+    expect(useGameStore.getState().money).toBe(5000000)
   })
 })
 

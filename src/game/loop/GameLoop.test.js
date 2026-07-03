@@ -6,10 +6,15 @@ import { formatCurrency } from '../currency.js'
 beforeEach(() => {
   vi.useFakeTimers()
   useGameStore.setState({
-    level: 1, reputation: 50, money: 200000, formattedMoney: formatCurrency(200000),
-    totalMembers: 0, pendingMembers: 0, currentDay: 1, currentMonth: 1,
+    level: 1, happiness: 70, money: 5000000, formattedMoney: formatCurrency(5000000),
+    totalMembers: 100, pendingMembers: 0, currentDay: 1, currentMonth: 1,
     racks: [], cashierCount: 1, queue: [], activeLoans: [], currentCustomers: 0, dayIncome: 0,
-    isRunning: false,
+    activeLoanRequests: [], acceptedLoans: [], gameStatus: 'running', lossReason: '', isRunning: false,
+    sectors: {
+      rice: { id: 'rice', level: 0, maxLevel: 5, successfulLoans: 0, failedLoans: 0 },
+      fruit: { id: 'fruit', level: 0, maxLevel: 5, successfulLoans: 0, failedLoans: 0 },
+      gas: { id: 'gas', level: 0, maxLevel: 5, successfulLoans: 0, failedLoans: 0 },
+    },
   })
 })
 
@@ -22,7 +27,7 @@ describe('GameLoop', () => {
     const loop = new GameLoop()
     loop.start()
     expect(useGameStore.getState().isRunning).toBe(true)
-    expect(useGameStore.getState().racks.length).toBe(4)
+    expect(useGameStore.getState().racks.length).toBe(3)
     expect(useGameStore.getState().currentCustomers).toBeGreaterThan(0)
     loop.stop()
   })

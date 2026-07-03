@@ -18,4 +18,6 @@ export const createEconomySlice = (set, get) => ({
     set({ money: next, formattedMoney: formatCurrency(next) })
     return true
   },
+
+  setMoney: (amount) => set({ money: amount, formattedMoney: formatCurrency(amount) }),
 })
