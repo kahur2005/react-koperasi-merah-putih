@@ -1,4 +1,4 @@
-import { CUSTOMER_DEMAND_WEIGHTS, HAPPINESS, LOANS, MEMBERSHIP, SECTORS, VILLAGE } from './config.js'
+import { CUSTOMER_DEMAND_WEIGHTS, DIFFICULTIES, HAPPINESS, LOANS, MEMBERSHIP, SECTORS, VILLAGE } from './config.js'
 import { ESSENTIAL_PRODUCT_IDS, PRODUCTS, PRODUCT_IDS } from './products.js'
 
 export function clamp(value, min, max) {
@@ -29,7 +29,8 @@ export function computeSellPrice(productId, sectorLevel) {
   return PRODUCTS[productId].baseSellPrice + sectorLevel * SECTORS.gasMarginPerLevel
 }
 
-export function computeHappinessDelta(stockByProduct, level) {
+export function computeHappinessDelta(stockByProduct, level, difficultyId = 'normal') {
+  const difficulty = DIFFICULTIES[difficultyId] ?? DIFFICULTIES.normal
   let delta = 0
   let allSafe = true
   PRODUCT_IDS.forEach((id) => {
@@ -43,6 +44,7 @@ export function computeHappinessDelta(stockByProduct, level) {
     }
   })
   if (allSafe) delta += HAPPINESS.allSafeBonus
+  if (delta < 0) return Math.round(delta * difficulty.happinessLossMultiplier)
   return delta
 }
 
@@ -79,7 +81,8 @@ export function allGoodsSafe(stockByProduct, level) {
   return PRODUCT_IDS.every((id) => stockStatus(id, stockByProduct[id] ?? 0, level) === 'safe')
 }
 
-export function computeLoanRisk(applicant) {
+export function computeLoanRisk(applicant, difficultyId = 'normal') {
+  const difficulty = DIFFICULTIES[difficultyId] ?? DIFFICULTIES.normal
   const debtBurdenRatio = applicant.loanAmount / Math.max(1, applicant.monthlyIncome)
   let debtBurdenScore = 45
   if (debtBurdenRatio <= 1.5) debtBurdenScore = 0
@@ -92,7 +95,7 @@ export function computeLoanRisk(applicant) {
   const incomeStability = applicant.incomeStability === 'stable' ? -10 : 0
   const impactBonus = { high: -10, medium: -5, low: 0 }[applicant.potentialVillageImpact] ?? 0
 
-  return clamp(20 + debtBurdenScore + crimeScore + repaymentScore + jobMismatchScore + incomeStability + impactBonus, 0, 100)
+  return clamp(20 + debtBurdenScore + crimeScore + repaymentScore + jobMismatchScore + incomeStability + impactBonus + difficulty.loanRiskOffset, 0, 100)
 }
 
 export function riskLabel(riskScore) {

@@ -109,3 +109,69 @@ export const GAME_STATUS = {
   won: 'won',
   lost: 'lost',
 }
+
+export const DIFFICULTIES = {
+  santai: {
+    id: 'santai',
+    label: 'Santai',
+    initialMoney: 6500000,
+    initialHappiness: 80,
+    happinessLossMultiplier: 0.7,
+    loanRiskOffset: -8,
+    memberGoalBonus: 1.15,
+  },
+  normal: {
+    id: 'normal',
+    label: 'Normal',
+    initialMoney: INITIAL_MONEY,
+    initialHappiness: HAPPINESS.start,
+    happinessLossMultiplier: 1,
+    loanRiskOffset: 0,
+    memberGoalBonus: 1,
+  },
+  tantangan: {
+    id: 'tantangan',
+    label: 'Tantangan',
+    initialMoney: 4000000,
+    initialHappiness: 65,
+    happinessLossMultiplier: 1.25,
+    loanRiskOffset: 8,
+    memberGoalBonus: 0.9,
+  },
+}
+
+export const DEFAULT_DIFFICULTY = 'normal'
+
+export const MISSIONS = [
+  {
+    id: 'stable-stock',
+    title: 'Stok Aman',
+    description: 'Keep rice, fruit, and gas above safe stock for 5 days.',
+    reward: { money: 150000, happiness: 2 },
+  },
+  {
+    id: 'local-rice',
+    title: 'Dukung Petani Beras',
+    description: 'Reach Rice Sector Level 1.',
+    reward: { members: 8, happiness: 2 },
+  },
+  {
+    id: 'member-200',
+    title: 'Anggota Makin Ramai',
+    description: 'Reach 200 cooperative members.',
+    reward: { money: 250000 },
+  },
+  {
+    id: 'happy-village',
+    title: 'Desa Bahagia',
+    description: 'Raise happiness to 85%.',
+    reward: { members: 10 },
+  },
+]
+
+export const TUTORIAL_STEPS = [
+  'Keep rice and gas stocked. They affect village happiness the most.',
+  'Company suppliers are reliable. Local suppliers become cheaper when sectors grow.',
+  'Loan decisions improve local production, but risky loans can drain money.',
+  'Complete missions and reach 500 members before Day 90.',
+]

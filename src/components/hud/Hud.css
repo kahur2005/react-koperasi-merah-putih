@@ -83,6 +83,76 @@
   font-size: 13px;
 }
 
+.hud-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.hud-toolbar button,
+.hud-toolbar select,
+.hud-card--modal button {
+  min-height: 30px;
+  padding: 5px 9px;
+  color: var(--cream);
+  background: #2f6f4e;
+  border: 2px solid var(--border-bevel);
+  border-radius: 6px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+}
+
+.hud-toolbar select {
+  background: rgba(25, 18, 14, 0.95);
+}
+
+.hud-tutorial {
+  pointer-events: auto;
+  align-self: flex-start;
+  max-width: min(360px, 100%);
+  padding: 10px;
+  color: var(--ink);
+  background: #ffe7a8;
+  border: 3px solid var(--border-outer);
+  border-radius: 8px;
+  box-shadow: 0 4px 0 var(--border-outer), 0 8px 14px rgba(0, 0, 0, 0.35);
+}
+
+.hud-tutorial p {
+  margin-top: 5px;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.hud-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 12;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  pointer-events: auto;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.hud-card--modal {
+  width: min(390px, 100%);
+  padding: 16px;
+}
+
+.hud-card--modal p {
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+.score-title {
+  color: #ffe7a8;
+  font-size: 20px !important;
+  font-weight: 800;
+}
+
 .hud-grid {
   align-self: stretch;
   display: grid;
@@ -202,6 +272,42 @@
   border-radius: 6px;
 }
 
+.mission-list {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.mission-row {
+  display: grid;
+  gap: 3px;
+  padding: 7px 8px;
+  background: rgba(25, 18, 14, 0.55);
+  border-left: 4px solid #d9ac35;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.mission-row--done {
+  border-left-color: #3ca35c;
+  opacity: 0.82;
+}
+
+.loan-clues {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 7px;
+}
+
+.loan-clues span {
+  padding: 3px 6px;
+  color: var(--ink);
+  background: #ffe7a8;
+  border-radius: 999px;
+  font-size: 11px;
+}
+
 .hud-card--log {
   max-height: 410px;
 }
@@ -230,7 +336,9 @@
 
   .hud-money,
   .hud-stat,
-  .hud-actions button {
+  .hud-actions button,
+  .hud-toolbar button,
+  .hud-toolbar select {
     font-size: 11px;
   }
 }

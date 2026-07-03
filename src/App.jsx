@@ -21,6 +21,7 @@ export default function App() {
   useEffect(() => {
     const loop = new GameLoop()
     loopRef.current = loop
+    loop.store.getState().loadGame()
     loop.start()
     return () => loop.stop()
   }, [])

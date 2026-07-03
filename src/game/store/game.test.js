@@ -23,6 +23,12 @@ function resetGameState() {
     dayIncome: 0,
     disappointedCustomers: 0,
     notifications: [],
+    completedMissions: [],
+    safeStockDays: 0,
+    missionToast: '',
+    lastDaySummary: null,
+    showDaySummary: false,
+    difficulty: 'normal',
     sectors: {
       rice: { id: 'rice', level: 0, maxLevel: 5, successfulLoans: 0, failedLoans: 0 },
       fruit: { id: 'fruit', level: 0, maxLevel: 5, successfulLoans: 0, failedLoans: 0 },
@@ -81,5 +87,40 @@ describe('endDay', () => {
     useGameStore.setState({ happiness: 0 })
     expect(useGameStore.getState().checkWinLose()).toBe('lost')
     expect(useGameStore.getState().lossReason).toContain('happiness')
+  })
+
+  it('playOneDay drains the queue and records a day summary', () => {
+    useGameStore.setState({
+      queue: [{ id: 'c1', requestedItem: 'rice' }],
+      racks: [
+        { id: 'r1', itemType: 'rice', capacity: 100, currentStock: 100 },
+        { id: 'r2', itemType: 'fruit', capacity: 80, currentStock: 80 },
+        { id: 'r3', itemType: 'gas', capacity: 60, currentStock: 60 },
+      ],
+    })
+    expect(useGameStore.getState().playOneDay(() => 0)).toBe(true)
+    expect(useGameStore.getState().lastDaySummary.sales).toBe(12000)
+    expect(useGameStore.getState().showDaySummary).toBe(true)
+  })
+
+  it('completes stock mission and applies rewards', () => {
+    useGameStore.setState({
+      racks: [
+        { id: 'r1', itemType: 'rice', capacity: 100, currentStock: 100 },
+        { id: 'r2', itemType: 'fruit', capacity: 80, currentStock: 80 },
+        { id: 'r3', itemType: 'gas', capacity: 60, currentStock: 60 },
+      ],
+    })
+    useGameStore.setState({ safeStockDays: 5 })
+    const completed = useGameStore.getState().checkMissions()
+    expect(completed.map((m) => m.id)).toContain('stable-stock')
+    expect(useGameStore.getState().money).toBe(5150000)
+  })
+
+  it('resetGame applies difficulty defaults', () => {
+    expect(useGameStore.getState().resetGame('santai')).toBe(true)
+    expect(useGameStore.getState().difficulty).toBe('santai')
+    expect(useGameStore.getState().money).toBe(6500000)
+    expect(useGameStore.getState().happiness).toBe(80)
   })
 })

@@ -15,7 +15,7 @@ function pick(list, rng) {
   return list[Math.floor(rng() * list.length)]
 }
 
-function createLoanRequest(day, level, rng = Math.random) {
+function createLoanRequest(day, level, difficulty, rng = Math.random) {
   const sectors = ['rice', 'fruit', 'gas']
   const sectorType = pick(sectors, rng)
   const aligned = rng() < 0.65
@@ -44,7 +44,7 @@ function createLoanRequest(day, level, rng = Math.random) {
     requestedDay: day,
     status: 'pending',
   }
-  const riskScore = computeLoanRisk(base)
+  const riskScore = computeLoanRisk(base, difficulty)
   return { ...base, riskScore, riskLabel: riskLabel(riskScore) }
 }
 
@@ -53,10 +53,10 @@ export const createLoansSlice = (set, get) => ({
   acceptedLoans: [],
 
   generateLoanRequests: (rng = Math.random) => {
-    const { level, currentDay } = get()
+    const { level, currentDay, difficulty } = get()
     const rule = LOANS.requestFrequency[level]
     if (!rule || currentDay % rule.everyDays !== 0) return []
-    const requests = Array.from({ length: rule.count }, () => createLoanRequest(currentDay, level, rng))
+    const requests = Array.from({ length: rule.count }, () => createLoanRequest(currentDay, level, difficulty, rng))
     set((s) => ({ activeLoanRequests: [...s.activeLoanRequests, ...requests].slice(-6) }))
     return requests
   },

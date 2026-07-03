@@ -24,10 +24,12 @@ export class GameLoop {
 
   tickCashiers() {
     const s = this.store.getState()
+    if (!s.isRunning || s.gameStatus !== 'running') return
     for (let i = 0; i < s.cashierCount; i++) s.serveCustomer()
   }
 
   tickDay() {
+    if (!this.store.getState().isRunning || this.store.getState().gameStatus !== 'running') return
     this.store.getState().endDay()
     if (this.store.getState().isGameOver()) {
       this.stop()
