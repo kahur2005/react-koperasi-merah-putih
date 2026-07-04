@@ -23,6 +23,7 @@
   box-shadow: 0 4px 0 var(--border-outer), 0 8px 14px rgba(0, 0, 0, 0.5);
   font-family: var(--font-pixel);
   font-size: 14px;
+  pointer-events: auto; /* re-enable hover so its title tooltip can appear */
 }
 
 .hud-money__coin {
@@ -47,6 +48,7 @@
   font-family: var(--font-body);
   font-size: 13px;
   white-space: nowrap;
+  pointer-events: auto; /* re-enable hover so its title tooltip can appear */
 }
 
 /* Pending conversions this day — commit into totalMembers at end of day. */
