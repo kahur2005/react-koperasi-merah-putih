@@ -43,6 +43,7 @@ export const createCustomersSlice = (set, get) => ({
     if (queue.length === 0) return null
     const [customer, ...rest] = queue
     if (!get().consumeStock(customer.requestedItem, 1)) {
+      get().failCustomer(customer)
       set({ queue: rest })
       get().failCustomer(customer)
       return null

@@ -44,6 +44,20 @@ describe('serveCustomer', () => {
     useGameStore.setState({ queue: [] })
     expect(useGameStore.getState().serveCustomer(() => 0)).toBe(null)
   })
+  it('penalizes reputation when queued customer finds stock depleted', () => {
+    useGameStore.setState({
+      reputation: 50,
+      queue: [{ id: 'c1', requestedItem: 'rice' }],
+      racks: [
+        { id: 'r1', itemType: 'rice', capacity: 20, currentStock: 0 },
+        { id: 'r2', itemType: 'gas', capacity: 20, currentStock: 20 },
+      ],
+    })
+    const served = useGameStore.getState().serveCustomer(() => 0)
+    expect(served).toBe(null)
+    expect(useGameStore.getState().queue.length).toBe(0)
+    expect(useGameStore.getState().reputation).toBe(48) // failDelta -2
+  })
 })
 
 describe('spawnCustomers', () => {
